@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Document</title>
+        <style>
+            /* .hamburger:hover .line-one,
+            .hamburger:hover .line-two,
+            .hamburger:hover .line-three {
+                transform-origin: 50% 50%;
+                animation: line-grow ease-out 500ms;
+            }
+
+            .hamburger:hover .line-two {
+                animation-delay: 75ms;
+            }
+
+            .hamburger:hover .line-three {
+                animation-delay: 150ms;
+            }
+            @keyframes line-grow {
+                0% {
+                    transform: scaleX(1);
+                }
+                50% {
+                    transform: scaleX(1.5);
+                }
+                100% {
+                    transform: scaleX(1);
+                }
+            } */
+        </style>
+    </head>
+    <body>
+        <svg class="hamburger" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <line class="line-one" x1="25" y1="42" x2="75" y2="42" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="4"></line>
+            <line class="line-two" x1="25" y1="50" x2="75" y2="50" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="4"></line>
+            <line class="line-three" x1="25" y1="58" x2="75" y2="58" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="4"></line>
+        </svg>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
+
+        <script>
+            const hamburger = document.querySelector('.hamburger');
+            const lineOne = hamburger.querySelector('.line-one');
+            const lineTwo = hamburger.querySelector('.line-two');
+            const lineThree = hamburger.querySelector('.line-three');
+
+            const lines = [lineOne, lineTwo, lineThree];
+            const tlm = new TimelineMax({});
+
+            const toggleMenu = new TimelineMax({ paused: true, reversed: true });
+
+            hamburger.addEventListener('mouseenter', () => {
+                if (hamburger.classList.contains('js-x')) {
+                    return;
+                }
+                tlm.staggerTo(lines, 0.25, { scaleX: 1.5, repeat: 1, yoyo: true, ease: Power2.easeInOut, svgOrigin: '50 50' }, 0.125);
+                // .to(lineOne, 0.25, { scaleX: 1.5 }).to(lineOne, 0.25, { scaleX: 1 });
+            });
+            toggleMenu
+                .to(lineTwo, 0.125, { scaleX: 0, transformOrigin: '50% 50%' })
+                .to(lineOne, 0.125, { transformOrigin: '50% 50%', y: 8, ease: Power2.easeInOut }, 'slide')
+                .to(lineThree, 0.125, { transformOrigin: '50% 50%', y: -8, ease: Power2.easeInOut }, 'slide')
+                .to(hamburger, 0.5, { rotation: 360, ease: Power4.easeInOut })
+                .to(lineOne, 0.25, { rotation: 45, ease: Power2.easeInOut }, 'cross')
+                .to(lineThree, 0.25, { rotation: -45, ease: Power2.easeInOut }, 'cross');
+
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('js-x');
+                toggleMenu.reversed() ? toggleMenu.play() : toggleMenu.reverse();
+            });
+        </script>
+    </body>
+</html>
